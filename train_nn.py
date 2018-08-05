@@ -34,12 +34,15 @@ labels = to_categorical(labels, num_classes)
 x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=test_ratio, random_state=random_seed)
 
 model = Sequential()
-model.add(Dense(3, input_dim=feature_count, activation="relu"))
-model.add(Dense(num_classes, activation="softmax"))
+model.add(Dense(num_classes, input_dim=feature_count, activation="softmax"))
 
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
 model.fit(x_train, y_train, epochs=epoch, batch_size=batch_size, validation_split=test_ratio)
+
+for layer in model.layers:
+    print layer.name
+    print layer.get_weights()
 
 scores = model.evaluate(x_test, y_test)
 print 'Test Loss: {}, Test Accuracy {}'.format(scores[0], scores[1])
